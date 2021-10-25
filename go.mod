@@ -1,4 +1,4 @@
-module watermill-rocketmq-aliyun
+module github.com/Robot-nan/watermill-rocketmq-aliyun
 
 go 1.16
 
