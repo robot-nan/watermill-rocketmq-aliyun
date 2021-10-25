@@ -1,4 +1,4 @@
-module watermill-rocketmq
+module watermill-rocketmq-aliyun
 
 go 1.16
 
