@@ -3,11 +3,11 @@ package rocketmq_test
 import (
 	"context"
 	"fmt"
-	"github.com/robot-nan/watermill-rocketmq-aliyun/pkg/rocketmq"
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/message/router/middleware"
 	"github.com/ThreeDotsLabs/watermill/message/router/plugin"
+	"github.com/robot-nan/watermill-rocketmq-aliyun/pkg/rocketmq"
 	"testing"
 	"time"
 )
