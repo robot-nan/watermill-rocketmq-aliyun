@@ -91,6 +91,7 @@ func (s *Subscriber) Subscribe(ctx context.Context, topic string) (<-chan *messa
 						// Topic中没有消息可消费。
 						if !strings.Contains(err.(errors.ErrCode).Error(), "MessageNotExist") {								s.logger.Error("Cannot reconnect messages consumer", err, logFields)
 							s.logger.Error("no message error:", err, logFields)
+							time.Sleep(time.Duration(5) * time.Second)
 						}
 						endChan <- 1
 					}
