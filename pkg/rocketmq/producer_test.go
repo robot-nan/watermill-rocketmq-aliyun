@@ -2,11 +2,11 @@ package rocketmq_test
 
 import (
 	"fmt"
+	"github.com/Robot-nan/watermill-rocketmq-aliyun/pkg/rocketmq"
 	"github.com/ThreeDotsLabs/watermill"
 	aliRocketSDK "github.com/aliyunmq/mq-http-go-sdk"
 	"testing"
 	"time"
-	"watermill-rocketmq/pkg/rocketmq"
 )
 
 func TestCreatePubSub(t *testing.T) {
