@@ -62,10 +62,10 @@ type SubscriberConfig struct {
 func (s *Subscriber) Subscribe(ctx context.Context, topic string) (<-chan *message.Message, error) {
 	output := make(chan *message.Message)
 	logFields := watermill.LogFields{
-		"provider":            "kafka",
-		"topic":               topic,
-		"consumer_group":      s.config.GroupID,
-		"kafka_consumer_uuid": watermill.NewShortUUID(),
+		"provider":       "rocketmq",
+		"topic":          topic,
+		"consumer_group": s.config.GroupID,
+		"uuid":           watermill.NewShortUUID(),
 	}
 	s.subscribersWg.Add(1)
 	go func() {
@@ -89,7 +89,8 @@ func (s *Subscriber) Subscribe(ctx context.Context, topic string) (<-chan *messa
 				case err := <-errChan:
 					{
 						// Topic中没有消息可消费。
-						if !strings.Contains(err.(errors.ErrCode).Error(), "MessageNotExist") {								s.logger.Error("Cannot reconnect messages consumer", err, logFields)
+						if !strings.Contains(err.(errors.ErrCode).Error(), "MessageNotExist") {
+							s.logger.Error("Cannot reconnect messages consumer", err, logFields)
 							s.logger.Error("no message error:", err, logFields)
 							time.Sleep(time.Duration(5) * time.Second)
 						}
