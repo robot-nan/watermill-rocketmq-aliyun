@@ -2,7 +2,6 @@ package rocketmq
 
 import (
 	"context"
-	"fmt"
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill/message"
 	aliRocketSDK "github.com/aliyunmq/mq-http-go-sdk"
@@ -80,7 +79,7 @@ func (s *Subscriber) Subscribe(ctx context.Context, topic string) (<-chan *messa
 						for _, v := range resp.Messages {
 							err := s.processMessage(ctx, output, v, logFields)
 							if err != nil {
-								s.logger.Error("Cannot reconnect messages consumer", err, logFields)
+								//s.logger.Error("Cannot reconnect messages consumer", err, logFields)
 								return
 							}
 						}
@@ -90,8 +89,8 @@ func (s *Subscriber) Subscribe(ctx context.Context, topic string) (<-chan *messa
 					{
 						// Topic中没有消息可消费。
 						if !strings.Contains(err.(errors.ErrCode).Error(), "MessageNotExist") {
-							s.logger.Error("Cannot reconnect messages consumer", err, logFields)
-							s.logger.Error("no message error:", err, logFields)
+							//s.logger.Error("Cannot reconnect messages consumer", err, logFields)
+							//s.logger.Error("no message error:", err, logFields)
 							time.Sleep(time.Duration(5) * time.Second)
 						}
 						endChan <- 1
@@ -99,7 +98,7 @@ func (s *Subscriber) Subscribe(ctx context.Context, topic string) (<-chan *messa
 
 				case <-time.After(35 * time.Second):
 					{
-						fmt.Println("Timeout of consumer message ??")
+						//fmt.Println("Timeout of consumer message ??")
 						endChan <- 1
 					}
 				}
@@ -124,7 +123,7 @@ func (s *Subscriber) Close() error {
 	close(s.closing)
 	s.subscribersWg.Wait()
 
-	s.logger.Debug("rocketmq subscriber closed", nil)
+	//s.logger.Debug("rocketmq subscriber closed", nil)
 
 	return nil
 }
@@ -147,19 +146,19 @@ ResendLoop:
 	for {
 		select {
 		case output <- msg:
-			fmt.Println("Message sent to consumer")
+			//fmt.Println("Message sent to consumer")
 		case <-s.closing:
-			fmt.Println("Closing, message discarded")
+			//fmt.Println("Closing, message discarded")
 			return nil
 		case <-ctx.Done():
-			fmt.Println("Closing, ctx cancelled before sent to consumer")
+			//fmt.Println("Closing, ctx cancelled before sent to consumer")
 			return nil
 		}
 		select {
 		case <-msg.Acked():
 			err := s.consumer.AckMessage([]string{rocketMqMsg.ReceiptHandle})
 			if err != nil {
-				s.logger.Info("AckMessage error:", logFields.Add(watermill.LogFields{"err": err.Error()}))
+				//s.logger.Info("AckMessage error:", logFields.Add(watermill.LogFields{"err": err.Error()}))
 				return err
 			}
 			break ResendLoop
@@ -167,10 +166,10 @@ ResendLoop:
 			msg = msg.Copy()
 			continue ResendLoop
 		case <-s.closing:
-			fmt.Println("Closing, message discarded before ack")
+			//fmt.Println("Closing, message discarded before ack")
 			return nil
 		case <-ctx.Done():
-			fmt.Println("close")
+			//fmt.Println("close")
 			return nil
 		}
 	}
